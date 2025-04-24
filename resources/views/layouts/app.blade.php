@@ -1,68 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>{{ config('app.name', 'Laravel CRUD') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    {{-- TailwindCSS via CDN --}}
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    {{-- Optional: Custom Tailwind config --}}
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1d4ed8', // biru
-                        danger: '#ef4444',
-                        success: '#22c55e',
-                    }
-                }
-            }
-        }
-    </script>
+    <title>@yield('title', 'MyApp')</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+<body class="bg-gray-100 text-gray-800">
 
-<body class="bg-gray-100 text-gray-800 min-h-screen">
+    {{-- Sidebar --}}
+    @include('components.sidebar')
 
-    {{-- Navigation bar (optional) --}}
-    <nav class="bg-white shadow p-4 mb-6">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <a href="/" class="text-xl font-bold text-primary">Restaurant App</a>
-            <div>
-                <a href="{{ route('orders.index') }}" class="text-gray-700 hover:text-primary mr-4">Orders</a>
-                <a href="{{ route('products.index') }}" class="text-gray-700 hover:text-primary mr-4">Products</a>
-                <a href="{{ route('product-categories.index') }}"
-                    class="text-gray-700 hover:text-primary">Categories</a>
-            </div>
-        </div>
-    </nav>
+    {{-- Main Content Wrapper --}}
+    <div class="md:ml-64 min-h-screen">
+        {{-- Optional: Mobile header --}}
+        <header class="bg-white shadow-md h-16 flex items-center px-6 md:hidden fixed top-0 left-0 right-0 z-20">
+            <div class="text-xl font-semibold text-blue-600">MyApp</div>
+        </header>
 
-    {{-- Flash messages --}}
-    <div class="max-w-4xl mx-auto">
-        @if(session('success'))
-            <div class="bg-green-100 text-green-800 px-4 py-3 rounded mb-4">
-                {{ session('success') }}
+        {{-- Page Content --}}
+        <main class="pt-20 md:pt-6 px-4">
+            <div class="max-w-7xl mx-auto">
+                {{-- Flash messages --}}
+                @if(session('success'))
+                    <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-2 rounded mb-4">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="bg-red-100 border border-red-300 text-red-800 px-4 py-2 rounded mb-4">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                {{-- Page Content --}}
+                @yield('content')
             </div>
-        @endif
-        @if($errors->any())
-            <div class="bg-red-100 text-red-800 px-4 py-3 rounded mb-4">
-                <ul class="list-disc list-inside">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        </main>
     </div>
 
-    {{-- Main content --}}
-    <main class="px-4">
-        @yield('content')
-    </main>
-
 </body>
-
 </html>

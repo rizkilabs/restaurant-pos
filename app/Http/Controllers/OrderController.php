@@ -17,7 +17,7 @@ class OrderController extends Controller
     {
         $orders = Order::latest()->get();
         $products = Product::all();
-        return view('dashboard', compact('orders', 'products'));
+        return view('orders.index', compact('orders', 'products'));
     }
 
     /**
