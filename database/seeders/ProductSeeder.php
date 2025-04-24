@@ -16,15 +16,18 @@ class ProductSeeder extends Seeder
     {
         $categories = ProductCategory::all();
 
-        // if ($categories->isEmpty()) {
-        //     $categories = ProductCategory::factory()->count(3)->create();
-        // }
+        if ($categories->isEmpty()) {
+            $categories = ProductCategory::factory()->count(3)->create();
+        }
 
-        // foreach ($categories as $category) {
-        //     Product::factory()->count(5)->create([
-        //         'category_id' => $category->id,
-        //         'is_active' => true,
-        //     ]);
-        // }
+        foreach ($categories as $category) {
+            Product::factory()->count(5)->create([
+                'category_id' => $category->id,
+                'is_active' => true,
+            ]);
+        }
+        
+
+        
     }
 }

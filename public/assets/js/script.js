@@ -2,7 +2,12 @@ async function loadDatabase() {
   return {
     getProducts: async () => {
       const response = await fetch('/api/products');
-      if (!response.ok) throw new Error("Gagal mengambil data produk");
+      if (!response.ok) {
+        console.log(reponse)
+        throw new Error("Gagal mengambil data produk")
+      
+      };
+
       return await response.json();
     }
   };
@@ -113,12 +118,117 @@ function initApp() {
       this.receiptDate = this.dateFormat(time);
     },
 
-    async printAndProceed() {
-      const receiptContent = document.getElementById('receipt-content');
-      const titleBefore = document.title;
-      const printArea = document.getElementById('print-area');
+    // async printAndProceed() {
+    //   const receiptContent = document.getElementById('receipt-content');
+    //   const titleBefore = document.title;
+    //   const printArea = document.getElementById('print-area');
 
-      printArea.innerHTML = receiptContent.innerHTML;
+    //   printArea.innerHTML = receiptContent.innerHTML;
+    //   document.title = this.receiptNo;
+    //   window.print();
+    //   document.title = titleBefore;
+    //   printArea.innerHTML = '';
+    //   this.isShowModalReceipt = false;
+
+    //   // Simpan ke database
+    //   const payload = {
+    //     order_code: this.receiptNo,
+    //     order_detail: this.cart.map(item => ({
+    //       product_id: item.productId,
+    //       qty: item.qty,
+    //       order_price: item.price,
+    //       order_subtotal: item.qty * item.price
+    //     })),
+    //     order_amount: this.getTotalPrice(),
+    //     order_change: this.change,
+    //     order_status: 'PAID'
+    //   };
+
+    //   try {
+    //     const response = await fetch('/api/orders', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+    //       },
+    //       body: JSON.stringify(payload)
+    //     });
+
+    //     if (!response.ok) throw new Error("Gagal menyimpan transaksi");
+    //     alert("Transaksi berhasil disimpan!");
+    //     this.clear();
+    //   } catch (error) {
+    //     console.error(error);
+    //     alert("Gagal menyimpan transaksi");
+    //   }
+
+    //   // Delay agar Alpine selesai render x-for dan x-text
+    //   // setTimeout(() => {
+    //   //     printArea.innerHTML = receiptContent.innerHTML;
+    //   //     document.title = this.receiptNo;
+    //   //     window.print();
+    //   //     document.title = titleBefore;
+    //   //     printArea.innerHTML = '';
+    //   //     this.isShowModalReceipt = false;
+    //   //     this.clear();
+    //   // }, 300); // delay 300ms aman untuk Alpine
+    // }
+    async printAndProceed() {
+      const printArea = document.getElementById('print-area');
+      const titleBefore = document.title;
+
+      let receiptItemsHtml = '';
+      this.cart.forEach((item, index) => {
+        receiptItemsHtml += `
+          <tr>
+            <td class="py-2 text-center">${index + 1}</td>
+            <td class="py-2 text-left">
+              <span>${item.name}</span><br />
+              <small>${this.priceFormat(item.price)}</small>
+            </td>
+            <td class="py-2 text-center">${item.qty}</td>
+            <td class="py-2 text-right">${this.priceFormat(item.qty * item.price)}</td>
+          </tr>
+        `;
+      });
+
+      const receiptContentHtml = `
+        <div class="p-4">
+          <h3 class="text-xl font-semibold text-center mb-4">Receipt</h3>
+          <p class="text-sm text-center mb-2">No: ${this.receiptNo}</p>
+          <p class="text-sm text-center mb-4">Date: ${this.receiptDate}</p>
+          <table class="w-full text-sm">
+            <thead>
+              <tr>
+                <th class="py-2 text-left">No</th>
+                <th class="py-2 text-left">Item</th>
+                <th class="py-2 text-center">Qty</th>
+                <th class="py-2 text-right">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${receiptItemsHtml}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" class="py-2 text-right font-semibold">Total</td>
+                <td class="py-2 text-right font-semibold">${this.priceFormat(this.getTotalPrice())}</td>
+              </tr>
+              <tr>
+                <td colspan="3" class="py-2 text-right font-semibold">Cash</td>
+                <td class="py-2 text-right font-semibold">${this.priceFormat(this.cash)}</td>
+              </tr>
+              <tr>
+                <td colspan="3" class="py-2 text-right font-semibold">Change</td>
+                <td class="py-2 text-right font-semibold">${this.priceFormat(this.change)}</td>
+              </tr>
+            </tfoot>
+          </table>
+          <p class="text-xs text-center mt-4">Thank you for your purchase!</p>
+        </div>
+      `;
+
+      printArea.innerHTML = receiptContentHtml;
       document.title = this.receiptNo;
       window.print();
       document.title = titleBefore;
@@ -128,7 +238,7 @@ function initApp() {
       // Simpan ke database
       const payload = {
         order_code: this.receiptNo,
-        order_detail: this.cart.map(item => ({
+        products: this.cart.map(item => ({
           product_id: item.productId,
           qty: item.qty,
           order_price: item.price,
@@ -156,18 +266,8 @@ function initApp() {
         console.error(error);
         alert("Gagal menyimpan transaksi");
       }
-
-      // Delay agar Alpine selesai render x-for dan x-text
-      // setTimeout(() => {
-      //     printArea.innerHTML = receiptContent.innerHTML;
-      //     document.title = this.receiptNo;
-      //     window.print();
-      //     document.title = titleBefore;
-      //     printArea.innerHTML = '';
-      //     this.isShowModalReceipt = false;
-      //     this.clear();
-      // }, 300); // delay 300ms aman untuk Alpine
     },
+    
 
     closeModalReceipt() {
       this.isShowModalReceipt = false;
