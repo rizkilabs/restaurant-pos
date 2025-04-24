@@ -83,5 +83,18 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Product deleted!');
     }
 
+    public function getProducts()
+    {
+        $products = Product::all();
+
+        foreach ($products as $product) {
+            if ($product->product_photo) {
+                $product->product_photo = asset('storage/' . $product->product_photo);
+            }
+        }
+
+        return response()->json($products);
+    }
+
 
 }

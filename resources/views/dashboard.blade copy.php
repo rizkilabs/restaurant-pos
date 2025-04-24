@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tailwind POS</title>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <script src="https://unpkg.com/idb/build/iife/index-min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js"></script>
-    <script src="{{ asset('assets/js/script.js')}}"></script>
+    <script src="{{asset('assets/js/script.js')}}"></script>
 </head>
 
 <body class="bg-blue-gray-50" x-data="initApp()" x-init="initDatabase()">
@@ -130,7 +130,7 @@
                     <div class="h-full overflow-y-auto px-2">
                         <div class="select-none bg-blue-gray-100 rounded-3xl flex flex-wrap content-center justify-center h-full opacity-25"
                             x-show="products.length === 0">
-                            <div class="w-full text-center">
+                            <!-- <div class="w-full text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 inline-block" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -141,7 +141,43 @@
                                     <br />
                                     ANY PRODUCTS TO SHOW
                                 </p>
+                            </div> -->
+
+
+                            <div class="w-full">
+                                @if($products->isEmpty())
+                                <div class="text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 inline-block text-gray-400"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                                    </svg>
+                                    <p class="text-xl text-gray-600">
+                                        YOU DON'T HAVE
+                                        <br />
+                                        ANY PRODUCTS TO SHOW
+                                    </p>
+                                </div>
+                                @else
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    @foreach ($products as $product)
+                                    <div class="bg-white shadow rounded-lg p-4 text-center">
+                                        @if($product->product_photo)
+                                        <img src="{{ asset('storage/' . $product->product_photo) }}"
+                                            alt="{{ $product->product_name }}" class="h-24 mx-auto object-cover">
+                                        @else
+                                        <div class="h-24 flex items-center justify-center bg-gray-100 text-gray-400">No
+                                            Image</div>
+                                        @endif
+                                        <h3 class="font-semibold mt-2">{{ $product->product_name }}</h3>
+                                        <p class="text-sm text-gray-500">Rp{{ number_format($product->product_price) }}
+                                        </p>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                @endif
                             </div>
+
                         </div>
                         <div class="select-none bg-blue-gray-100 rounded-3xl flex flex-wrap content-center justify-center h-full opacity-25"
                             x-show="filteredProducts().length === 0 && keyword.length > 0">
@@ -162,13 +198,11 @@
                             <template x-for="product in filteredProducts()" :key="product . id">
                                 <div role="button"
                                     class="select-none cursor-pointer transition-shadow overflow-hidden rounded-2xl bg-white shadow hover:shadow-lg"
-                                    :title="product . product_name" x-on:click="addToCart(product)">
-                                    <img :src="product . product_photo" :alt="product . name"
-                                        class="w-full h-32 object-cover rounded-t-xl">
+                                    :title="product . name" x-on:click="addToCart(product)">
+                                    <img :src="product . image" :alt="product . name">
                                     <div class="flex pb-3 px-3 text-sm -mt-3">
-                                        <p class="flex-grow truncate mr-1 mt-6" x-text="product.product_name"></p>
-                                        <p class="nowrap font-semibold mt-6"
-                                            x-text="priceFormat(product.product_price)"></p>
+                                        <p class="flex-grow truncate mr-1" x-text="product.name"></p>
+                                        <p class="nowrap font-semibold" x-text="priceFormat(product.price)"></p>
                                     </div>
                                 </div>
                             </template>
@@ -316,7 +350,7 @@
         </div>
 
         <!-- modal first time -->
-        <!-- <div x-show="firstTime"
+        <div x-show="firstTime"
             class="fixed glass w-full h-screen left-0 top-0 z-10 flex flex-wrap justify-center content-center p-24">
             <div class="w-96 rounded-3xl p-8 bg-white shadow-xl">
                 <div class="text-center">
@@ -366,7 +400,7 @@
                     </button>
                 </div>
             </div>
-        </div> -->
+        </div>
 
         <!-- modal receipt -->
         <div x-show="isShowModalReceipt"
@@ -385,8 +419,7 @@
                 x-transition:leave-end="opacity-0 transform scale-90">
                 <div id="receipt-content" class="text-left w-full text-sm p-6 overflow-auto">
                     <div class="text-center">
-                        <img src="{{asset('assets/img/receipt-logo.png')}}" alt="Tailwind POS"
-                            class="mb-3 w-8 h-8 inline-block">
+                        <img src="img/receipt-logo.png" alt="Tailwind POS" class="mb-3 w-8 h-8 inline-block">
                         <h2 class="text-xl font-semibold">TAILWIND POS</h2>
                         <p>CABANG KONOHA SELATAN</p>
                     </div>
