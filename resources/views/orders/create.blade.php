@@ -1,51 +1,65 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="max-w-xl mx-auto bg-white p-6 mt-6 shadow rounded">
-        <h2 class="text-xl font-semibold mb-4">{{ isset($order) ? 'Edit' : 'Create' }} Order</h2>
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+        <h2 class="text-2xl font-bold mb-4">Tambah Order</h2>
 
-        <form action="{{ isset($order) ? route('orders.update', $order) : route('orders.store') }}" method="POST">
+        <form action="{{ route('orders.store') }}" method="POST">
             @csrf
-            @if(isset($order)) @method('PUT') @endif
 
             <div class="mb-4">
-                <label class="block mb-1">Order Code</label>
-                <input type="text" name="order_code" class="w-full border rounded p-2"
-                    value="{{ old('order_code', $order->order_code ?? '') }}" required>
+                <label for="order_code" class="block font-semibold">Kode Order</label>
+                <input type="text" name="order_code" class="w-full border rounded px-3 py-2" required>
             </div>
 
             <div class="mb-4">
-                <label class="block mb-1">Detail</label>
-                <textarea name="order_detail" class="w-full border rounded p-2"
-                    rows="3">{{ old('order_detail', $order->order_detail ?? '') }}</textarea>
-            </div>
-
-            <div class="mb-4">
-                <label class="block mb-1">Amount</label>
-                <input type="number" name="order_amount" class="w-full border rounded p-2"
-                    value="{{ old('order_amount', $order->order_amount ?? '') }}" required>
-            </div>
-
-            <div class="mb-4">
-                <label class="block mb-1">Status</label>
-                <select name="order_status" class="w-full border rounded p-2">
-                    @foreach(['pending', 'paid', 'cancelled'] as $status)
-                        <option value="{{ $status }}" @selected(old('order_status', $order->order_status ?? 'pending') === $status)>
-                            {{ ucfirst($status) }}
-                        </option>
-                    @endforeach
+                <label for="order_status" class="block font-semibold">Status</label>
+                <select name="order_status" class="w-full border rounded px-3 py-2" required>
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
+                    <option value="cancelled">Cancelled</option>
                 </select>
             </div>
 
             <div class="mb-4">
-                <label class="block mb-1">Change</label>
-                <input type="number" name="order_change" class="w-full border rounded p-2"
-                    value="{{ old('order_change', $order->order_change ?? '') }}">
+                <label class="block font-semibold mb-2">Produk</label>
+                <div id="product-list">
+                    <div class="flex gap-2 mb-2">
+                        <select name="products[0][product_id]" class="w-1/2 border rounded px-2 py-1">
+                            @foreach ($products as $product)
+                                <option value="{{ $product->id }}">{{ $product->product_name }} -
+                                    Rp{{ number_format($product->product_price) }}</option>
+                            @endforeach
+                        </select>
+                        <input type="number" name="products[0][qty]" class="w-1/4 border rounded px-2 py-1"
+                            placeholder="Qty" min="1" value="1">
+                    </div>
+                </div>
+
+                <button type="button" onclick="addProductRow()" class="text-sm text-blue-600">+ Tambah Produk</button>
             </div>
 
-            <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                {{ isset($order) ? 'Update' : 'Create' }}
-            </button>
+            <button type="submit" class="bg-primary text-white px-4 py-2 rounded">Simpan Order</button>
         </form>
     </div>
+
+    <script>
+        let rowCount = 1;
+        function addProductRow() {
+            const list = document.getElementById('product-list');
+            const newRow = document.createElement('div');
+            newRow.classList.add('flex', 'gap-2', 'mb-2');
+
+            newRow.innerHTML = `
+                <select name="products[${rowCount}][product_id]" class="w-1/2 border rounded px-2 py-1">
+                    @foreach ($products as $product)
+                        <option value="{{ $product->id }}">{{ $product->product_name }} - Rp{{ number_format($product->product_price) }}</option>
+                    @endforeach
+                </select>
+                <input type="number" name="products[${rowCount}][qty]" class="w-1/4 border rounded px-2 py-1" placeholder="Qty" min="1" value="1">
+            `;
+            list.appendChild(newRow);
+            rowCount++;
+        }
+    </script>
 @endsection

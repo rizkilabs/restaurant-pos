@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -21,7 +22,8 @@ class OrderController extends Controller
      */
     public function create()
     {
-        return view('orders.create');
+        $products = \App\Models\Product::all();
+        return view('orders.create', compact('products'));
     }
 
     /**
@@ -30,16 +32,42 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'order_code' => 'required|unique:orders,order_code',
-            'order_detail' => 'nullable|string',
-            'order_amount' => 'required|numeric|min:0',
-            'order_status' => 'required|string',
-            'order_change' => 'nullable|numeric|min:0',
+            'order_code' => 'required|unique:orders',
+            'order_status' => 'required',
+            'products.*.product_id' => 'required|exists:products,id',
+            'products.*.qty' => 'required|integer|min:1',
         ]);
 
-        Order::create($request->all());
+        // Simpan order
+        $order = \App\Models\Order::create([
+            'order_code' => $request->order_code,
+            'order_status' => $request->order_status,
+            'order_detail' => $request->order_detail,
+            'order_amount' => 0, // Akan di-update nanti
+            'order_change' => 0,
+        ]);
 
-        return redirect()->route('orders.index')->with('success', 'Order created successfully!');
+        $total = 0;
+
+        foreach ($request->products as $productItem) {
+            $product = \App\Models\Product::find($productItem['product_id']);
+            $qty = $productItem['qty'];
+            $price = $product->product_price;
+            $subtotal = $price * $qty;
+
+            $order->details()->create([
+                'product_id' => $product->id,
+                'order_price' => $price,
+                'qty' => $qty,
+                'order_subtotal' => $subtotal,
+            ]);
+
+            $total += $subtotal;
+        }
+
+        $order->update(['order_amount' => $total]);
+
+        return redirect()->route('orders.index')->with('success', 'Order berhasil ditambahkan!');
     }
 
     /**
