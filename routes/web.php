@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductCategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CashierController;
+use App\Http\Controllers\UserController;
 
 
 Route::get('/', function () {
@@ -28,6 +29,7 @@ Route::middleware('auth')->group(function () {
 
 });
 
+Route::resource('users', UserController::class);
 Route::resource('orders', OrderController::class);
 Route::resource('products', ProductController::class);
 Route::resource('product-categories', \App\Http\Controllers\ProductCategoryController::class);
