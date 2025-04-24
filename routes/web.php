@@ -10,43 +10,47 @@ use App\Http\Controllers\{
     CashierController
 };
 
+// Default route (login)
 Route::get('/', fn() => view('auth.login'));
 
-Route::get('/dashboard', fn() => view('dashboard'))
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-Route::middleware(['auth'])->group(function () {
+// Authenticated & Verified Users
+Route::middleware(['auth', 'verified'])->group(function () {
+    
+    // Role: SUPERADMIN
     Route::middleware('role:superadmin')->group(function () {
+        // Dashboard superadmin
+        Route::get('/admin', function () {
+            return view('admin.dashboard');
+        })->name('admin.dashboard');
+
+        // Users
         Route::resource('users', UserController::class)->except(['show', 'destroy']);
         Route::delete('users/{user}', [UserController::class, 'destroy'])
             ->middleware('canDeleteUser')
             ->name('users.destroy');
 
+        // Products (full access kecuali index)
         Route::resource('products', ProductController::class)->except(['index']);
+
+        // Categories
         Route::resource('product-categories', ProductCategoryController::class);
-
-        Route::get('/products', function () {
-            return view('products.index');
-        })->middleware(['auth', 'role:superadmin'])->name('admin.index');
-        
-
-        Route::get('/dashboard', fn() => view('dashboard'))
-            ->middleware(['auth', 'verified'])
-            ->name('dashboard');
     });
 
+    // Produk index (kasir & superadmin)
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
 
+    // Role: KASIR
     Route::middleware('role:kasir')->group(function () {
         Route::get('/cashier', [CashierController::class, 'index'])->name('cashier.index');
         Route::post('/cashier', [CashierController::class, 'store'])->name('cashier.store');
     });
 
+    // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Orders
     Route::resource('orders', OrderController::class);
 });
 
