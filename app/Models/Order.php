@@ -16,4 +16,10 @@ class Order extends Model
         'order_status',
         'order_change'
     ];
+
+    public function details()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+
 }
