@@ -1,0 +1,1 @@
+@include('product_categories.form', ['title' => 'Edit Category'])
