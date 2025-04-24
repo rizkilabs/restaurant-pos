@@ -7,3 +7,5 @@ Route::get('/', function () {
 });
 
 Route::resource('product-categories', \App\Http\Controllers\ProductCategoryController::class);
+Route::resource('products', \App\Http\Controllers\ProductController::class);
+
