@@ -53,6 +53,13 @@
         </div>
 
         <div class="mb-4">
+            <label for="stock" class="block text-sm font-medium text-gray-700">Stock</label>
+            <input type="number" name="stock" id="stock" value="{{ old('stock', $product->stock ?? 0) }}"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+        </div>
+
+
+        <div class="mb-4">
             <label class="inline-flex items-center">
                 <input type="checkbox" name="is_active" value="1" class="mr-2"
                        {{ old('is_active', $product->is_active ?? true) ? 'checked' : '' }}>
