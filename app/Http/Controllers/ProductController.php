@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -15,6 +16,10 @@ class ProductController extends Controller
 
     public function create()
     {
+        if (Auth::user()->role !== 'superadmin') {
+            abort(403, 'Unauthorized');
+        }
+
         $categories = \App\Models\ProductCategory::all();
         return view('products.create', [
             'product' => new Product(),
@@ -26,6 +31,10 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        if (Auth::user()->role !== 'superadmin') {
+            abort(403, 'Unauthorized');
+        }
+
         $data = $request->validate([
             'category_id' => 'required|exists:product_categories,id',
             'product_name' => 'required|string|max:255',
@@ -47,6 +56,10 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        if (Auth::user()->role !== 'superadmin') {
+            abort(403, 'Unauthorized');
+        }
+
         $categories = \App\Models\ProductCategory::all();
         return view('products.edit', [
             'product' => $product,
@@ -58,6 +71,10 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
+
+        if (Auth::user()->role !== 'superadmin') {
+            abort(403, 'Unauthorized');
+        }
         $data = $request->validate([
             'category_id' => 'required|exists:product_categories,id',
             'product_name' => 'required|string|max:255',
@@ -79,6 +96,10 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        if (Auth::user()->role !== 'superadmin') {
+            abort(403, 'Unauthorized');
+        }
+
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Product deleted!');
     }

@@ -2,13 +2,9 @@
     <h2 class="text-2xl font-bold mb-6">Menu</h2>
 
     @if(auth()->user()->role === 'superadmin')
-        <a href="{{ route('admin.dashboard') }}" class="block py-2 px-3 rounded hover:bg-gray-700">Dashboard</a>
-        <a href="{{ route('users.index') }}" class="block py-2 px-3 rounded hover:bg-gray-700">Users</a>
-        <a href="{{ route('products.index') }}" class="block py-2 px-3 rounded hover:bg-gray-700">Products</a>
-        <a href="{{ route('product-categories.index') }}" class="block py-2 px-3 rounded hover:bg-gray-700">Categories</a>
-        <a href="{{ route('orders.index') }}" class="block py-2 px-3 rounded hover:bg-gray-700">Orders</a>
+        {{-- menu admin --}}
     @elseif(auth()->user()->role === 'kasir')
-        <a href="{{ route('cashier.index') }}" class="block py-2 px-3 rounded hover:bg-gray-700">Transaksi</a>
+        <a href="{{ route('cashier.dashboard') }}" class="block py-2 px-3 rounded hover:bg-gray-700">Cashier</a>
         <a href="{{ route('products.index') }}" class="block py-2 px-3 rounded hover:bg-gray-700">Data Produk</a>
     @endif
 </aside>
