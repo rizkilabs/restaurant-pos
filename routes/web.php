@@ -35,10 +35,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/admin', [AdminDashBoardController::class, 'adminDashboard'])->name('admin.dashboard');
 
         // Manajemen User
-        Route::resource('users', UserController::class)->except(['show', 'destroy']);
-        Route::delete('users/{user}', [UserController::class, 'destroy'])
-            ->middleware('canDeleteUser')
-            ->name('users.destroy');
+        Route::resource('users', UserController::class);
+        // Route::delete('users/{user}', [UserController::class, 'destroy'])
+        //     ->middleware('canDeleteUser')
+        //     ->name('users.destroy');
 
         // Produk & Kategori (penuh)
         Route::resource('products', ProductController::class)->except(['index']);
