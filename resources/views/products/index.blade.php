@@ -30,6 +30,7 @@
                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Price</th>
                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Photo</th>
                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Category</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Stok</th>
                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Status</th>
                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Actions</th>
                 </tr>
@@ -47,6 +48,7 @@
                             @endif
                         </td>
                         <td class="px-4 py-2">{{ $product->category->name ?? '-' }}</td>
+                        <td class="px-4 py-2">{{ $product->stock ?? '-' }}</td>
                         <td class="px-4 py-2">
                             <span
                                 class="px-2 py-1 text-xs font-semibold rounded {{ $product->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">

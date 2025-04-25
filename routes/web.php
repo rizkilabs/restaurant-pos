@@ -18,14 +18,6 @@ Route::get('/', fn() => view('auth.login'));
 // Middleware untuk user yang sudah login dan verifikasi
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/pimpinan', fn() => view('pimpinan.dashboard'))->name('pimpinan.dashboard');
-
-    // Laporan Penjualan
-    Route::get('/pimpinan/reports/harian', [PimpinanReportController::class, 'harian'])->name('pimpinan.reports.harian');
-    Route::get('/pimpinan/reports/mingguan', [PimpinanReportController::class, 'mingguan'])->name('pimpinan.reports.mingguan');
-    Route::get('/pimpinan/reports/bulanan', [PimpinanReportController::class, 'bulanan'])->name('pimpinan.reports.bulanan');
-    Route::get('/pimpinan/reports/filter', [PimpinanReportController::class, 'filter'])->name('pimpinan.reports.filter');
-
     // ==========================
     // SUPERADMIN
     // ==========================
@@ -36,9 +28,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Manajemen User
         Route::resource('users', UserController::class);
-        // Route::delete('users/{user}', [UserController::class, 'destroy'])
-        //     ->middleware('canDeleteUser')
-        //     ->name('users.destroy');
 
         // Produk & Kategori (penuh)
         Route::resource('products', ProductController::class)->except(['index']);
@@ -49,28 +38,40 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // ==========================
-    // KASIR
+    // KASIR & SUPERADMIN
     // ==========================
-    Route::middleware('role:kasir')->group(function () {
+    Route::middleware('role:kasir,superadmin')->group(function () {
 
         // Dashboard kasir
-        Route::get('/cashier', function () {
-            return view('cashier.dashboard');
-        })->name('cashier.dashboard');
+        Route::get('/cashier', fn() => view('cashier.dashboard'))->name('cashier.dashboard');
 
-
-        // Route::get('/cashier/', [CashierController::class, 'index'])->name('cashier.dashboard');
+        // Transaksi kasir
         Route::get('/cashier/transaction', [CashierController::class, 'create'])->name('cashier.create');
         Route::post('/cashier/transaction', [CashierController::class, 'store'])->name('cashier.store');
     });
 
     // ==========================
-    // AKSES UMUM (kasir & admin)
+    // PIMPINAN & SUPERADMIN
+    // ==========================
+    Route::middleware('role:pimpinan,superadmin')->group(function () {
+
+        Route::get('/pimpinan', fn() => view('pimpinan.dashboard'))->name('pimpinan.dashboard');
+
+        // Laporan Penjualan
+        Route::get('/pimpinan/reports/harian', [PimpinanReportController::class, 'harian'])->name('pimpinan.reports.harian');
+        Route::get('/pimpinan/reports/mingguan', [PimpinanReportController::class, 'mingguan'])->name('pimpinan.reports.mingguan');
+        Route::get('/pimpinan/reports/bulanan', [PimpinanReportController::class, 'bulanan'])->name('pimpinan.reports.bulanan');
+        Route::get('/pimpinan/reports/filter', [PimpinanReportController::class, 'filter'])->name('pimpinan.reports.filter');
+    });
+
+    // ==========================
+    // AKSES UMUM SEMUA ROLE
     // ==========================
 
     // Lihat daftar produk
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
 
+    // API
     Route::get('/api/products', [ProductController::class, 'getProducts']);
     Route::post('/api/orders', [OrderController::class, 'store']);
 
