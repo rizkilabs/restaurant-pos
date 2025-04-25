@@ -6,6 +6,5 @@ use App\Http\Controllers\{
     ProductController,
 };
 
-Route::get('/api/products', [ProductController::class, 'getProducts']);
-Route::post('/api/orders', [OrderController::class, 'store']);
+
 

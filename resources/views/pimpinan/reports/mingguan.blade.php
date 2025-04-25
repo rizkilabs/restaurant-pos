@@ -1,48 +1,29 @@
 @extends('layouts.app')
 
-@section('title', 'Laporan Mingguan')
-
 @section('content')
-    <h1 class="text-2xl font-bold mb-6">Laporan Penjualan Harian</h1>
+    <div class="container">
+        <h1 class="text-xl font-bold mb-4">Laporan Mingguan</h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-2xl shadow p-6">
-            <h2 class="text-lg font-semibold mb-2">Total Penjualan</h2>
-            <p class="text-2xl font-bold text-blue-600">Rp 12.500.000</p>
-        </div>
-
-        <div class="bg-white rounded-2xl shadow p-6">
-            <h2 class="text-lg font-semibold mb-2">Jumlah Transaksi</h2>
-            <p class="text-2xl font-bold text-green-600">58</p>
-        </div>
-
-        <div class="bg-white rounded-2xl shadow p-6">
-            <h2 class="text-lg font-semibold mb-2">Produk Terlaris</h2>
-            <p class="text-lg font-bold text-indigo-600">Parfum X</p>
-        </div>
-    </div>
-
-    <div class="mt-8 bg-white rounded-2xl shadow p-6">
-        <h2 class="text-xl font-semibold mb-4">Rincian Transaksi Hari Ini</h2>
-        <table class="w-full table-auto text-left border-collapse">
-            <thead class="bg-gray-100">
+        <table class="w-full table-auto border">
+            <thead class="bg-gray-200">
                 <tr>
-                    <th class="px-4 py-2">Waktu</th>
-                    <th class="px-4 py-2">Kasir</th>
                     <th class="px-4 py-2">Produk</th>
-                    <th class="px-4 py-2">Jumlah</th>
-                    <th class="px-4 py-2">Total</th>
+                    <th class="px-4 py-2">Jumlah Terjual</th>
+                    <th class="px-4 py-2">Total Penjualan</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="border-b">
-                    <td class="px-4 py-2">Sennin</td>
-                    <td class="px-4 py-2">Dewi</td>
-                    <td class="px-4 py-2">Parfum X</td>
-                    <td class="px-4 py-2">3</td>
-                    <td class="px-4 py-2">Rp 450.000</td>
-                </tr>
-                <!-- Tambah data dummy atau real -->
+                @forelse ($data as $item)
+                    <tr class="border-t">
+                        <td class="px-4 py-2">{{ $item->name }}</td>
+                        <td class="px-4 py-2">{{ $item->total_qty }}</td>
+                        <td class="px-4 py-2">Rp {{ number_format($item->total_sales, 0, ',', '.') }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="px-4 py-2 text-center">Tidak ada data.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

@@ -10,10 +10,10 @@ use App\Models\OrderDetail;
 
 class CashierController extends Controller
 {
-    public function index()
+    public function create()
     {
         $products = Product::where('is_active', true)->get();
-        return view('dashboard', compact('products'));
+        return view('cashier.create', compact('products'));
     }
 
     public function store(Request $request)

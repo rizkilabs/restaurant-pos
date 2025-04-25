@@ -7,7 +7,9 @@ use App\Http\Controllers\{
     ProductController,
     ProductCategoryController,
     UserController,
-    CashierController
+    CashierController,
+    AdminDashBoardController,
+    PimpinanReportController
 };
 
 // Halaman login sebagai default
@@ -19,9 +21,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/pimpinan', fn() => view('pimpinan.dashboard'))->name('pimpinan.dashboard');
 
     // Laporan Penjualan
-    Route::get('/laporan/harian', fn() => view('pimpinan.reports.harian'))->name('laporan.harian');
-    Route::get('/laporan/mingguan', fn() => view('pimpinan.reports.mingguan'))->name('laporan.mingguan');
-    Route::get('/laporan/bulanan', fn() => view('pimpinan.reports.bulanan'))->name('laporan.bulanan');
+    Route::get('/pimpinan/reports/harian', [PimpinanReportController::class, 'harian'])->name('pimpinan.reports.harian');
+    Route::get('/pimpinan/reports/mingguan', [PimpinanReportController::class, 'mingguan'])->name('pimpinan.reports.mingguan');
+    Route::get('/pimpinan/reports/bulanan', [PimpinanReportController::class, 'bulanan'])->name('pimpinan.reports.bulanan');
+    Route::get('/pimpinan/reports/filter', [PimpinanReportController::class, 'filter'])->name('pimpinan.reports.filter');
 
     // ==========================
     // SUPERADMIN
@@ -29,9 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:superadmin')->group(function () {
 
         // Dashboard superadmin
-        Route::get('/admin', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
+        Route::get('/admin', [AdminDashBoardController::class, 'adminDashboard'])->name('admin.dashboard');
 
         // Manajemen User
         Route::resource('users', UserController::class)->except(['show', 'destroy']);
@@ -57,8 +58,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return view('cashier.dashboard');
         })->name('cashier.dashboard');
 
-        // Transaksi
-        Route::get('/cashier/transaction', [CashierController::class, 'index'])->name('cashier.index');
+
+        // Route::get('/cashier/', [CashierController::class, 'index'])->name('cashier.dashboard');
+        Route::get('/cashier/transaction', [CashierController::class, 'create'])->name('cashier.create');
         Route::post('/cashier/transaction', [CashierController::class, 'store'])->name('cashier.store');
     });
 
@@ -68,6 +70,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Lihat daftar produk
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
+
+    Route::get('/api/products', [ProductController::class, 'getProducts']);
+    Route::post('/api/orders', [OrderController::class, 'store']);
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
