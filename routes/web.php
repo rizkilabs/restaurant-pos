@@ -16,15 +16,12 @@ Route::get('/', fn() => view('auth.login'));
 // Middleware untuk user yang sudah login dan verifikasi
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::middleware('role:pimpinan')->group(function () {
-        Route::get('/pimpinan', fn() => view('pimpinan.dashboard'))->name('pimpinan.dashboard');
+    Route::get('/pimpinan', fn() => view('pimpinan.dashboard'))->name('pimpinan.dashboard');
 
-        Route::get('products', [ProductController::class, 'index'])->name('products.index');
-
-        Route::get('/laporan/penjualan', function () {
-            return view('pimpinan.laporan');
-        })->name('laporan.penjualan');
-    });
+    // Laporan Penjualan
+    Route::get('/laporan/harian', fn() => view('pimpinan.reports.harian'))->name('laporan.harian');
+    Route::get('/laporan/mingguan', fn() => view('pimpinan.reports.mingguan'))->name('laporan.mingguan');
+    Route::get('/laporan/bulanan', fn() => view('pimpinan.reports.bulanan'))->name('laporan.bulanan');
 
     // ==========================
     // SUPERADMIN
