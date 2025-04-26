@@ -40,29 +40,34 @@ class OrderController extends Controller
             'products.*.product_id' => 'required|exists:products,id',
             'products.*.qty' => 'required|integer|min:1',
         ]);
-
+    
         $order = Order::create([
             'order_code' => $request->order_code,
             'order_status' => $request->order_status,
             'order_amount' => $request->order_amount,
             'order_change' => $request->order_change,
         ]);
-
+    
         foreach ($request->products as $productItem) {
             $product = Product::find($productItem['product_id']);
             $qty = $productItem['qty'];
             $subtotal = $product->product_price * $qty;
-
+    
+            // Buat order detail
             $order->details()->create([
                 'product_id' => $product->id,
                 'order_price' => $product->product_price,
                 'qty' => $qty,
                 'order_subtotal' => $subtotal,
             ]);
+    
+            // Update stock
+            $product->decrement('stock', $qty);
         }
-
+    
         return response()->json(['success' => true, 'message' => 'Order saved successfully']);
     }
+    
 
     /**
      * Show the form for editing the specified resource.
