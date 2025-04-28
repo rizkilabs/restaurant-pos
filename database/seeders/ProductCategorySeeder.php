@@ -1,9 +1,8 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\ProductCategory;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\ProductCategory;
 use Illuminate\Database\Seeder;
 
 class ProductCategorySeeder extends Seeder
@@ -14,20 +13,14 @@ class ProductCategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            'Makanan Pembuka',
-            'Makanan Utama',
-            'Makanan Penutup',
-            'Minuman Dingin',
-            'Minuman Hangat',
-            'Menu Sarapan',
-            'Menu Anak-anak',
-            'Makanan Spesial Mingguan',
-            'Makanan Vegetarian',
-            'Paket Hemat',
+            ['name' => 'Makanan'],
+            ['name' => 'Minuman'],
+            ['name' => 'Snack'],
+            ['name' => 'Dessert'],
         ];
 
-        foreach ($categories as $name) {
-            ProductCategory::create(['name' => $name]);
+        foreach ($categories as $category) {
+            ProductCategory::create($category);
         }
     }
 }

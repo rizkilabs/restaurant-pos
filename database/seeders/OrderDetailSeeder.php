@@ -2,35 +2,49 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Order;
-use App\Models\Product;
 use App\Models\OrderDetail;
+use Illuminate\Database\Seeder;
 
 class OrderDetailSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        $orders = Order::all();
-        $products = Product::all();
+        $orderDetails = [
+            [
+                'order_id' => 1,
+                'product_id' => 2,
+                'order_price' => 25000,
+                'qty' => 2,
+                'order_subtotal' => 50000,
+            ],
+            [
+                'order_id' => 1,
+                'product_id' => 3,
+                'order_price' => 15000,
+                'qty' => 1,
+                'order_subtotal' => 15000,
+            ],
+            [
+                'order_id' => 2,
+                'product_id' => 4,
+                'order_price' => 40000,
+                'qty' => 1,
+                'order_subtotal' => 40000,
+            ],
+            [
+                'order_id' => 3,
+                'product_id' => 1,
+                'order_price' => 10000,
+                'qty' => 3,
+                'order_subtotal' => 30000,
+            ],
+        ];
 
-        foreach ($orders as $order) {
-            // Ambil 2-4 produk acak untuk setiap order
-            $orderProducts = $products->random(rand(2, 4));
-
-            foreach ($orderProducts as $product) {
-                $qty = rand(1, 5);
-                $price = $product->product_price;
-                $subtotal = $price * $qty;
-
-                OrderDetail::create([
-                    'order_id' => $order->id,
-                    'product_id' => $product->id,
-                    'order_price' => $price,
-                    'qty' => $qty,
-                    'order_subtotal' => $subtotal,
-                ]);
-            }
+        foreach ($orderDetails as $detail) {
+            OrderDetail::create($detail);
         }
     }
 }

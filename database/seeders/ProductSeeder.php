@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Product;
-use App\Models\ProductCategory;
+use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
 {
@@ -14,20 +12,43 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        // $categories = ProductCategory::all();
+        $products = [
+            [
+                'category_id' => 1,
+                'product_name' => 'Nasi Goreng Spesial',
+                'product_price' => 25000,
+                'product_photo' => 'products/nasi-goreng.jpg',
+                'stock' => 50,
+                'is_active' => true,
+            ],
+            [
+                'category_id' => 1,
+                'product_name' => 'Mie Ayam Bakso',
+                'product_price' => 20000,
+                'product_photo' => 'products/mie-ayam.jpg',
+                'stock' => 40,
+                'is_active' => true,
+            ],
+            [
+                'category_id' => 2,
+                'product_name' => 'Es Teh Manis',
+                'product_price' => 5000,
+                'product_photo' => 'products/es-teh.jpg',
+                'stock' => 100,
+                'is_active' => true,
+            ],
+            [
+                'category_id' => 2,
+                'product_name' => 'Jus Alpukat',
+                'product_price' => 15000,
+                'product_photo' => 'products/jus-alpukat.jpg',
+                'stock' => 30,
+                'is_active' => true,
+            ],
+        ];
 
-        // if ($categories->isEmpty()) {
-        //     $categories = ProductCategory::factory()->count(3)->create();
-        // }
-
-        // foreach ($categories as $category) {
-        //     Product::factory()->count(5)->create([
-        //         'category_id' => $category->id,
-        //         'is_active' => true,
-        //     ]);
-        // }
-        
-
-        
+        foreach ($products as $product) {
+            Product::create($product);
+        }
     }
 }

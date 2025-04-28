@@ -2,33 +2,46 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        User::create([
-            'name' => 'Super Admin',
-            'email' => 'superadmin@mail.com',
-            'role' => 'superadmin',
-            'password' => Hash::make('password'),
-        ]);
+        $users = [
+            [
+                'name' => 'Super Admin',
+                'email' => 'superadmin@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'superadmin',
+            ],
+            [
+                'name' => 'Kasir 1',
+                'email' => 'kasir1@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'kasir',
+            ],
+            [
+                'name' => 'Pimpinan 1',
+                'email' => 'pimpinan1@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'pimpinan',
+            ],
+            [
+                'name' => 'Kasir 2',
+                'email' => 'kasir2@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'kasir',
+            ],
+        ];
 
-        User::create([
-            'name' => 'Kasir 1',
-            'email' => 'kasir@mail.com',
-            'role' => 'kasir',
-            'password' => Hash::make('password'),
-        ]);
-
-        User::create([
-            'name' => 'Pimpinan',
-            'email' => 'pimpinan@mail.com',
-            'role' => 'pimpinan',
-            'password' => Hash::make('password'),
-        ]);
+        foreach ($users as $user) {
+            User::create($user);
+        }
     }
 }
