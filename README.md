@@ -127,8 +127,8 @@ routes/
 
 ## 📸 Screenshots
 
-![Superadmin Dashboard](https://ibb.co.com/20XDQQH0)
-![Product Management](https://ibb.co.com/zVWwfrNM)
+![Superadmin Dashboard](screenshots/admin_dashboard.png)
+![Product Management](screenshots/cashier_page.png)
 
 ## 🤝 Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss what you'd like to change.
