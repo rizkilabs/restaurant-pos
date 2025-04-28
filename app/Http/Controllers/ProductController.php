@@ -17,7 +17,7 @@ class ProductController extends Controller
     public function create()
     {
         if (Auth::user()->role !== 'superadmin') {
-            abort(403, 'Unauthorized');
+            abort(403, 'Anda tidak mempunyai Akses! ');
         }
 
         $categories = \App\Models\ProductCategory::all();
