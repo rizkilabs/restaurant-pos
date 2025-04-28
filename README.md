@@ -1,6 +1,3 @@
-Here's the complete English version of your README.md in proper Markdown format:
-
-```markdown
 # 🍽️ RestoPOS - Point of Sale System
 
 A web-based **Point of Sale (POS)** system for restaurants with features to manage:
@@ -130,8 +127,8 @@ routes/
 
 ## 📸 Screenshots
 
-![Superadmin Dashboard](screenshot/dashboard.png)
-![Product Management](screenshot/products.png)
+![Superadmin Dashboard](https://ibb.co.com/20XDQQH0)
+![Product Management](https://ibb.co.com/zVWwfrNM)
 
 ## 🤝 Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss what you'd like to change.
@@ -144,4 +141,3 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 - For product image upload issues, check PHP configuration (`upload_max_filesize`, `post_max_size`)
 
 ## 🚀 Enjoy using RestoPOS!
-```
