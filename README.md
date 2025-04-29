@@ -19,7 +19,7 @@ A web-based **Point of Sale (POS)** system for restaurants with features to mana
 - **Database Seeders**: Initial data for Users, Products, Categories, Orders
 
 ## 🛠️ Technology Stack
-- **Backend**: Laravel 10+
+- **Backend**: Laravel 12
 - **Frontend**: Blade, TailwindCSS
 - **Database**: MySQL/MariaDB
 - **Authentication**: Laravel Breeze (optional)
@@ -47,7 +47,7 @@ cp .env.example .env
 ```
 Configure database connection in `.env`:
 ```
-DB_DATABASE=restopos
+DB_DATABASE=restaurant_pos
 DB_USERNAME=root
 DB_PASSWORD=
 ```
