@@ -16,6 +16,7 @@ class Product extends Model
         'product_price',
         'product_photo',
         'product_description',
+        'stock',
         'is_active'
     ];
 
