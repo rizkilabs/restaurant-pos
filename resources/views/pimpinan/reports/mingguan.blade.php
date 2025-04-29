@@ -8,23 +8,31 @@
             <thead class="bg-gray-200">
                 <tr>
                     <th class="px-4 py-2">Produk</th>
-                    <th class="px-4 py-2">Jumlah Terjual</th>
-                    <th class="px-4 py-2">Total Penjualan</th>
+                    <th class="px-4 py-2">Jumlah</th>
+                    <th class="px-4 py-2">Subtotal</th>
+                    <th class="px-4 py-2">Waktu Transaksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($data as $item)
                     <tr class="border-t">
-                        <td class="px-4 py-2">{{ $item->product_name }}</td>
-                        <td class="px-4 py-2">{{ $item->total_qty }}</td>
-                        <td class="px-4 py-2">Rp {{ number_format($item->total_sales, 0, ',', '.') }}</td>
+                        <td class="px-4 py-2 text-center">{{ $item->product->product_name }}</td>
+                        <td class="px-4 py-2 text-center">{{ $item->qty }}</td>
+                        <td class="px-4 py-2 text-center">Rp {{ number_format($item->order_subtotal, 0, ',', '.') }}</td>
+                        <td class="px-4 py-2 text-center">
+                            {{ $item->order->created_at->format('d-m-Y H:i') }}
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="3" class="px-4 py-2 text-center">Tidak ada data.</td>
+                        <td colspan="4" class="px-4 py-2 text-center">Tidak ada data.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
+
+        <div class="mt-4">
+            {{ $data->links() }}
+        </div>
     </div>
 @endsection

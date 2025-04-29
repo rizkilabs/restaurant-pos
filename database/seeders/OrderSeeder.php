@@ -2,50 +2,46 @@
 
 namespace Database\Seeders;
 
-use App\Models\Order;
 use Illuminate\Database\Seeder;
+use App\Models\Order;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class OrderSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $orders = [
-            [
-                'order_code' => 'ORD-2025001',
-                'order_detail' => '2x Burger, 1x Fries',
-                'order_amount' => 75000,
-                'order_status' => 'paid',
-                'order_change' => 5000,
-            ],
-            [
-                'order_code' => 'ORD-2025002',
-                'order_detail' => '1x Pizza, 2x Soda',
-                'order_amount' => 120000,
-                'order_status' => 'pending',
-                'order_change' => 0,
-            ],
-            [
-                'order_code' => 'ORD-2025003',
-                'order_detail' => '3x Coffee',
-                'order_amount' => 45000,
-                'order_status' => 'paid',
-                'order_change' => 0,
-            ],
-            [
-                'order_code' => 'ORD-2025004',
-                'order_detail' => '1x Pasta, 1x Ice Cream',
-                'order_amount' => 90000,
-                'order_status' => 'cancelled',
-                'order_change' => 0,
-            ],
-        ];
+        // Harian: 10 data untuk hari ini
+        for ($i = 1; $i <= 10; $i++) {
+            Order::create([
+                'order_code' => 'ORD-HARIAN-' . $i,
+                'order_amount' => rand(50000, 150000),
+                'order_change' => rand(1000, 20000),
+                'order_status' => 'PAID',
+                'created_at' => Carbon::now(),
+            ]);
+        }
 
-        foreach ($orders as $order) {
-            Order::create($order);
+        // Mingguan: 10 data antara 1–7 hari yang lalu
+        for ($i = 1; $i <= 10; $i++) {
+            Order::create([
+                'order_code' => 'ORD-MINGGUAN-' . $i,
+                'order_amount' => rand(50000, 150000),
+                'order_change' => rand(1000, 20000),
+                'order_status' => 'PAID',
+                'created_at' => Carbon::now()->subDays(rand(1, 7)),
+            ]);
+        }
+
+        // Bulanan: 10 data antara 8–30 hari yang lalu
+        for ($i = 1; $i <= 10; $i++) {
+            Order::create([
+                'order_code' => 'ORD-BULANAN-' . $i,
+                'order_amount' => rand(50000, 150000),
+                'order_change' => rand(1000, 20000),
+                'order_status' => 'PAID',
+                'created_at' => Carbon::now()->subDays(rand(8, 30)),
+            ]);
         }
     }
 }

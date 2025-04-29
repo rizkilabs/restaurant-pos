@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\OrderDetail;
 use Carbon\Carbon;
+use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 
 class PimpinanReportController extends Controller
@@ -41,18 +42,20 @@ class PimpinanReportController extends Controller
 
     private function getReportData($startDate, $endDate)
     {
-        return OrderDetail::select(
-            'products.product_name as name', // gunakan alias name agar konsisten dengan blade
-            DB::raw('SUM(order_details.qty) as total_qty'),
-            DB::raw('SUM(order_details.qty * products.product_price) as total_sales')
-        )
-            ->join('orders', 'order_details.order_id', '=', 'orders.id')
-            ->join('products', 'order_details.product_id', '=', 'products.id')
-            ->whereBetween('orders.created_at', [$startDate, $endDate])
-            ->groupBy('products.product_name')
-            ->orderByDesc('total_sales')
-            ->get();
+        return OrderDetail::with(['product', 'order'])
+            ->whereHas('order', function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            })
+            ->orderByDesc(
+                Order::select('created_at')
+                    ->whereColumn('orders.id', 'order_details.order_id')
+                    ->limit(1)
+            )
+            ->paginate(10);
     }
+
+
+
 
     public function filter(Request $request)
     {

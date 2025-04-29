@@ -240,7 +240,7 @@ function initApp() {
         order_status: 'PAID',
         order_amount: this.getTotalPrice(),
         order_change: this.change,
-        order_detail: this.cart.map(item => ({
+        products: this.cart.map(item => ({
           product_id: item.productId,
           qty: item.qty,
           order_price: item.price,
