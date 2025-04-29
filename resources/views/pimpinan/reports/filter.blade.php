@@ -7,12 +7,14 @@
         <form method="GET" action="{{ route('pimpinan.reports.filter') }}" class="mb-6 flex gap-4 items-end">
             <div>
                 <label for="start_date" class="block mb-1">Dari Tanggal</label>
-                <input type="date" name="start_date" id="start_date" class="border px-3 py-2 rounded" value="{{ request('start_date') }}">
+                <input type="date" name="start_date" id="start_date" class="border px-3 py-2 rounded"
+                    value="{{ request('start_date') }}">
             </div>
 
             <div>
                 <label for="end_date" class="block mb-1">Sampai Tanggal</label>
-                <input type="date" name="end_date" id="end_date" class="border px-3 py-2 rounded" value="{{ request('end_date') }}">
+                <input type="date" name="end_date" id="end_date" class="border px-3 py-2 rounded"
+                    value="{{ request('end_date') }}">
             </div>
 
             <div>

@@ -42,7 +42,7 @@ class PimpinanReportController extends Controller
     private function getReportData($startDate, $endDate)
     {
         return OrderDetail::select(
-            'products.product_name',
+            'products.product_name as name', // gunakan alias name agar konsisten dengan blade
             DB::raw('SUM(order_details.qty) as total_qty'),
             DB::raw('SUM(order_details.qty * products.product_price) as total_sales')
         )
@@ -62,7 +62,7 @@ class PimpinanReportController extends Controller
         $data = null;
 
         if ($startDate && $endDate) {
-            $data = $this->getReportData(Carbon::parse($startDate), Carbon::parse($endDate));
+            $data = $this->getReportData(Carbon::parse($startDate), Carbon::parse($endDate)->endOfDay());
         }
 
         return view('pimpinan.reports.filter', compact('data', 'startDate', 'endDate'));
