@@ -15,6 +15,7 @@
                 <tr class="bg-gray-100">
                     <th class="p-2 text-left">Name</th>
                     <th class="p-2 text-left">Email</th>
+                    <th class="p-2 text-left">Role</th>
                     <th class="p-2 text-left">Actions</th>
                 </tr>
             </thead>
@@ -23,12 +24,15 @@
                     <tr>
                         <td class="p-2">{{ $user->name }}</td>
                         <td class="p-2">{{ $user->email }}</td>
+                        <td class="p-2 capitalize">{{ $user->role }}</td>
                         <td class="p-2">
                             <a href="{{ route('users.edit', $user) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
                             <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline delete-form">
                                 @csrf @method('DELETE')
                                 <button type="button" class="text-red-600 hover:underline delete-button"
-                                    data-name="{{ $user->name }}">Delete</button>
+                                    data-name="{{ $user->name }}">
+                                    Delete
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -50,15 +54,14 @@
             });
         }
 
-        // SweetAlert untuk tombol delete
         document.querySelectorAll('.delete-button').forEach(button => {
             button.addEventListener('click', function () {
                 const form = this.closest('form');
                 const name = this.dataset.name;
 
                 Swal.fire({
-                    title: `Hapus ${name}?`,
-                    text: "Data yang dihapus tidak bisa dikembalikan!",
+                    title: `Hapus user "${name}"?`,
+                    text: "Tindakan ini tidak bisa dibatalkan!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
