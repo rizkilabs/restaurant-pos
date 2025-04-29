@@ -29,8 +29,8 @@ A web-based **Point of Sale (POS)** system for restaurants with features to mana
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/your-username/restopos.git
-cd restopos
+git clone https://github.com/rizkilabs/restaurant-pos.git
+cd restaurant-pos
 ```
 
 ### 2. Install Dependencies
