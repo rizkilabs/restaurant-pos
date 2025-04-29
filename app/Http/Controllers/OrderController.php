@@ -37,37 +37,45 @@ class OrderController extends Controller
         $request->validate([
             'order_code' => 'required|unique:orders',
             'order_status' => 'required',
+            'order_amount' => 'required|numeric|min:0',
+            'order_change' => 'required|numeric|min:0',
+            'products' => 'required|array|min:1',
             'products.*.product_id' => 'required|exists:products,id',
             'products.*.qty' => 'required|integer|min:1',
         ]);
-    
+
+
         $order = Order::create([
             'order_code' => $request->order_code,
             'order_status' => $request->order_status,
             'order_amount' => $request->order_amount,
             'order_change' => $request->order_change,
         ]);
-    
-        foreach ($request->products as $productItem) {
-            $product = Product::find($productItem['product_id']);
-            $qty = $productItem['qty'];
-            $subtotal = $product->product_price * $qty;
-    
-            // Buat order detail
+
+
+        foreach ($request->products as $product) {
+            $productData = Product::find($product['product_id']);
+            $subtotal = $product['qty'] * $productData->product_price;
+
             $order->details()->create([
-                'product_id' => $product->id,
-                'order_price' => $product->product_price,
-                'qty' => $qty,
+                'product_id' => $product['product_id'],
+                'qty' => $product['qty'],
+                'order_price' => $productData->product_price,
                 'order_subtotal' => $subtotal,
             ]);
-    
-            // Update stock
-            $product->decrement('stock', $qty);
+
+
+            $productData->decrement('stock', $product['qty']);
         }
-    
-        return response()->json(['success' => true, 'message' => 'Order saved successfully']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Transaksi berhasil disimpan.'
+        ]);
     }
-    
+
+
+
 
     /**
      * Show the form for editing the specified resource.

@@ -235,19 +235,21 @@ function initApp() {
       printArea.innerHTML = '';
       this.isShowModalReceipt = false;
 
-      // Simpan ke database
       const payload = {
         order_code: this.receiptNo,
-        products: this.cart.map(item => ({
+        order_status: 'PAID',
+        order_amount: this.getTotalPrice(),
+        order_change: this.change,
+        order_detail: this.cart.map(item => ({
           product_id: item.productId,
           qty: item.qty,
           order_price: item.price,
           order_subtotal: item.qty * item.price
-        })),
-        order_amount: this.getTotalPrice(),
-        order_change: this.change,
-        order_status: 'PAID'
+        }))
       };
+      
+      
+      
 
       try {
         const response = await fetch('/api/orders', {

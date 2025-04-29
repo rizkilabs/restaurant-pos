@@ -15,7 +15,7 @@
             <tbody>
                 @forelse ($data as $item)
                     <tr class="border-t">
-                        <td class="px-4 py-2">{{ $item->name }}</td>
+                        <td class="px-4 py-2">{{ $item->product_name }}</td>
                         <td class="px-4 py-2">{{ $item->total_qty }}</td>
                         <td class="px-4 py-2">Rp {{ number_format($item->total_sales, 0, ',', '.') }}</td>
                     </tr>

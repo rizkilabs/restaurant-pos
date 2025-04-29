@@ -11,9 +11,10 @@ class PimpinanReportController extends Controller
 {
     public function harian()
     {
-        $today = Carbon::today();
+        $start = Carbon::today()->startOfDay();
+        $end = Carbon::today()->endOfDay();
 
-        $data = $this->getReportData($today, $today);
+        $data = $this->getReportData($start, $end);
 
         return view('pimpinan.reports.harian', compact('data'));
     }

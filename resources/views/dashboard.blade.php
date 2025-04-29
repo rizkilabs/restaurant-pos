@@ -9,7 +9,7 @@
     <title>Tailwind POS</title>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{{asset('assets/favicon.ico')}}" type="image/x-icon">
     <script src="https://unpkg.com/idb/build/iife/index-min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js"></script>
     <script src="{{ asset('assets/js/script.js')}}"></script>
